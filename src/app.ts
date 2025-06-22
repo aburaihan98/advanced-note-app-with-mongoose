@@ -72,4 +72,26 @@ app.get("/notes/:noteId", async (req: Request, res: Response) => {
   });
 });
 
+app.patch("/notes-update/:noteId", async (req: Request, res: Response) => {
+  const id = req.params.noteId;
+  const updateDoc = req.body;
+  const note = await Note.findByIdAndUpdate(id, updateDoc, { new: true });
+
+  res.json({
+    message: "Update single note successfully",
+    note,
+  });
+});
+
+app.delete("/notes-delete/:noteId", async (req: Request, res: Response) => {
+  const id = req.params.noteId;
+
+  const note = await Note.findByIdAndDelete(id, { new: true });
+
+  res.json({
+    message: "Delete single note successfully",
+    note,
+  });
+});
+
 export default app;
