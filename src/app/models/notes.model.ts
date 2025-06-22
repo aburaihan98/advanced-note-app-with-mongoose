@@ -1,13 +1,18 @@
 import mongoose from "mongoose";
+import { INotes } from "../interfaces/note.interface";
 
-const noteSchema = new mongoose.Schema(
+const noteSchema = new mongoose.Schema<INotes>(
   {
     name: { type: String, required: true, trim: true },
     content: { type: String, default: "" },
     category: {
       type: String,
-      enum: ["Personal", "Work", "Study", "Other"],
-      default: "Personal",
+      enum: ["personal", "work", "study", "other"],
+      default: "personal",
+    },
+    pinned: {
+      type: Boolean,
+      default: false,
     },
     tags: {
       label: { type: String, required: true },
@@ -20,4 +25,4 @@ const noteSchema = new mongoose.Schema(
   }
 );
 
-export const Note = mongoose.model("Note", noteSchema);
+export const Note = mongoose.model<INotes>("Note", noteSchema);

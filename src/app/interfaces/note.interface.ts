@@ -1,0 +1,10 @@
+export interface INotes {
+  name: string;
+  content: string;
+  category: "personal" | "work" | "study" | "other";
+  pinned: boolean;
+  tags: {
+    label: string;
+    color: string;
+  };
+}
