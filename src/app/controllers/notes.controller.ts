@@ -26,7 +26,7 @@ notesRotes.post("/create-note", async (req: Request, res: Response) => {
 });
 
 notesRotes.get("/", async (req: Request, res: Response) => {
-  const note = await Note.find();
+  const note = await Note.find().populate("user");
 
   res.json({
     message: "Get all note successfully",
