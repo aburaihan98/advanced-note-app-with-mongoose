@@ -88,4 +88,12 @@ userSchema.static(
   }
 );
 
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.post("save", function (doc) {
+  console.log("%s has been saved", doc._id);
+});
+
 export const User = model<IUser, userStaticMethod>("User", userSchema);
