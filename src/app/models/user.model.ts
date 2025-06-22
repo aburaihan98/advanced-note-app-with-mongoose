@@ -19,58 +19,66 @@ const addressSchema = new Schema<IAddress>(
   }
 );
 
-const userSchema = new Schema<IUser, userStaticMethod, userInstanceMethod>({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: [3, "Must be at least 3, got {VALUE}"],
-    maxlength: 15,
-  },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  email: {
-    type: String,
-    unique: [true, "This email has been sent"],
-    lowercase: true,
-    required: true,
-    trim: true,
-    // validate: {
-    //   validator: function (value) {
-    //     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    //   },
-    //   message: (props) => {
-    //     return `Email ${props.value} is not valid email`;
-    //   },
-    // },
-    validate: [validator.isEmail, "Email is not valid email"],
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  role: {
-    type: String,
-    uppercase: true,
-    enum: {
-      values: ["USER", "ADMIN"],
-      message: "No validate role",
+const userSchema = new Schema<IUser, userStaticMethod, userInstanceMethod>(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: [3, "Must be at least 3, got {VALUE}"],
+      maxlength: 15,
     },
-    default: "USER",
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    age: {
+      type: Number,
+      required: true,
+    },
+    email: {
+      type: String,
+      unique: [true, "This email has been sent"],
+      lowercase: true,
+      required: true,
+      trim: true,
+      // validate: {
+      //   validator: function (value) {
+      //     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      //   },
+      //   message: (props) => {
+      //     return `Email ${props.value} is not valid email`;
+      //   },
+      // },
+      validate: [validator.isEmail, "Email is not valid email"],
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    role: {
+      type: String,
+      uppercase: true,
+      enum: {
+        values: ["USER", "ADMIN"],
+        message: "No validate role",
+      },
+      default: "USER",
+    },
+    address: {
+      type: addressSchema,
+      required: true,
+    },
   },
-  address: {
-    type: addressSchema,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 userSchema.method(
   "hashPassword",
@@ -106,6 +114,10 @@ userSchema.post("findOneAndDelete", async function (doc) {
 userSchema.pre("find", function (next) {
   console.log("Allah");
   next();
+});
+
+userSchema.virtual("fullname").get(function () {
+  return this.firstName + " " + this.lastName;
 });
 
 export const User = model<IUser, userStaticMethod>("User", userSchema);
