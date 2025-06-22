@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { Note } from "../models/notes.model";
+import { log } from "node:console";
 
 export const notesRotes = express.Router();
 

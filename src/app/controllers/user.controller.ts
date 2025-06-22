@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { User } from "../models/user.model";
 import { Note } from "../models/notes.model";
 import { z } from "zod";
+import { Mongoose } from "mongoose";
 
 export const usersRotes = express.Router();
 
@@ -74,7 +75,8 @@ usersRotes.patch("/:userId", async (req: Request, res: Response) => {
 usersRotes.delete("/:userId", async (req: Request, res: Response) => {
   const id = req.params.userId;
 
-  const user = await User.findByIdAndDelete(id, { new: true });
+  // const user = await User.findByIdAndDelete(id, { new: true });
+  const user = await User.findOneAndDelete({ _id: id });
 
   res.json({
     message: "Delete single user successfully",

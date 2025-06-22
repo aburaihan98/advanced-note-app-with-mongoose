@@ -7,6 +7,7 @@ import {
   userStaticMethod,
 } from "../interfaces/user.interface";
 import validator from "validator";
+import { Note } from "./notes.model";
 
 const addressSchema = new Schema<IAddress>(
   {
@@ -94,6 +95,17 @@ userSchema.pre("save", async function () {
 
 userSchema.post("save", function (doc) {
   console.log("%s has been saved", doc._id);
+});
+
+userSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Note.deleteMany({ user: doc._id });
+  }
+});
+
+userSchema.pre("find", function (next) {
+  console.log("Allah");
+  next();
 });
 
 export const User = model<IUser, userStaticMethod>("User", userSchema);
