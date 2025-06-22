@@ -80,8 +80,6 @@ app.patch("/notes-update/:noteId", async (req: Request, res: Response) => {
 app.delete("/notes-delete/:noteId", async (req: Request, res: Response) => {
   const id = req.params.noteId;
 
-  const note = await Note.findByIdAndDelete(id, { new: true });
-
   res.json({
     message: "Delete single note successfully",
     note,
